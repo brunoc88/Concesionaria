@@ -1,7 +1,6 @@
 const Empleado = require('../Model/empleado')
 const bcrypt = require('bcrypt')
 
-
 exports.indexFormularioEmpleado = async (req, res) =>{
     try {
         return res.status(200).json('INDEX')
@@ -57,14 +56,13 @@ exports.desactivarCuenta = async (req, res) => {
 
         const empleado = await Empleado.findByPk(id)
         if(!empleado) return res.status(404).json('Empleado no encontrado')
-            
+
         await Empleado.update({estado:false}, {where:{idEmpleado:id}})
         return res.status(200).json('Cuenta desactivada!')
     } catch (error) {
         return res.status(500).json(`Hubo un error: ${error}`)
     }
 }
-
 
 const checkDuplicados = async (empleado) => {
 

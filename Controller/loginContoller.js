@@ -60,3 +60,8 @@ exports.login = async (req, res) => {
         console.log(`Ocurrio un error: ${error}`)
     }
 }
+
+exports.logout = async  (req, res) => {
+  res.clearCookie('token');
+  res.status(200).json({ mensaje: 'Sesión cerrada' });
+}
