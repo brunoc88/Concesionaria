@@ -1,0 +1,15 @@
+POST http://localhost:3000/cliente/alta
+Content-Type: application/json
+Cookie: token= 'aqui va el token'
+
+{
+    "nombre": "Jorge",
+    "apellido": "Cerutti",
+    "email": "jorgec@gmail.com",
+    "telefono": "111333",
+    "dni": "0002"
+}
+
+###
+PATCH http://localhost:3000/cliente/baja/1
+Cookie: token= 'aqui va el token'

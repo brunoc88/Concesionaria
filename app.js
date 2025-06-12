@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser')
 //
 const loginRouter = require('./Router/login')
 const empleadoRouter = require('./Router/empleado')
-const { SECRET } = require('./utils/confing')
+const clienteRouter = require('./Router/cliente')
 //middleware
 app.use(methodOverride('_method'));
 app.use(express.json())
@@ -19,6 +19,7 @@ app.use(cookieParser());
 
 app.use('/', loginRouter)
 app.use('/empleado', empleadoRouter)
+app.use('/cliente', clienteRouter)
 
 
 sequelize.sync({})

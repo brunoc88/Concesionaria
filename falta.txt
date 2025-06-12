@@ -1,0 +1,14 @@
+Empleado:
+
+info del perfil
+editar perfil
+
+Cliente:
+info del cliente
+editar perfil
+
+Vehiculo:
+ABMC
+
+CONTRATO:
+ABMC
