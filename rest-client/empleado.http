@@ -14,3 +14,7 @@ Content-Type: application/json
     "dni": "0002"
 }
 
+###
+###
+PATCH http://localhost:3000/empleado/baja/5
+Cookie: token= 'aqui va el token'
