@@ -1,21 +1,33 @@
 const Empleado = require('../Model/empleado')
 const bcrypt = require('bcrypt')
 
-exports.altaEmpleado = async(req, res)=>{
+exports.indexFormularioEmpleado = async (req, res) =>{
+    try {
+        return res.status(200).json('INDEX')
+    } catch (error) {
+        return res.status(500).json(`Hubo un error ${error}`)
+    }
+}
+
+exports.altaEmpleado = async (req, res) => {
     try {
         const data = req.body
-        const duplicado = checkDuplicados(data)
 
-        if(duplicado.length > 0){
-            return res.status(409)
+        const duplicado = await checkDuplicados(data)
+
+        if (duplicado.length >= 1) {
+            return res.status(409).json({
+                mensaje: "Error de duplicado",
+                duplicados: duplicado
+            })
         }
 
-        if(data.usuario.length < 5){
-            return res.status(400)
+        if (data.usuario.length < 5) {
+            return res.status(400).json("nombre de usuario muy corto")
         }
 
-        if(data.password.length < 5){
-            return res.status(400)
+        if (data.password.length < 5) {
+            return res.status(400).json("password muy corto")
         }
 
         const hashpassword = await bcrypt.hash(data.password, 10)
@@ -31,27 +43,28 @@ exports.altaEmpleado = async(req, res)=>{
         }
 
         await Empleado.create(nuevoEmpleado)
-        return res.status(201)
-        
+        return res.status(201).json("empleado creado!")
+
     } catch (error) {
         return res.status(500).json(`Ocurrio un error: ${error}`)
     }
 }
 
-const checkDuplicados = async (empleado) =>{
+const checkDuplicados = async (empleado) => {
+
     let duplicados = []
 
-    let checkDni = await Empleado.findOne({where:{dni: empleado.dni}})
-    if(checkDni) duplicados.push('Dni ya registrado!')
+    let checkDni = await Empleado.findOne({ where: { dni: empleado.dni } })
+    if (checkDni) duplicados.push('Dni ya registrado!')
 
-    let checkEmail = await Empleado.findOne({where: {email: empleado.email}})
-    if(checkEmail) duplicados.push('Email ya registrado!')
+    let checkEmail = await Empleado.findOne({ where: { email: empleado.email } })
+    if (checkEmail) duplicados.push('Email ya registrado!')
 
-    let checkPhone = await Empleado.findOne({where:{telefono: empleado.telefono}})
-    if(checkPhone) duplicados.push('Telefono ya registrado!')
+    let checkPhone = await Empleado.findOne({ where: { telefono: empleado.telefono } })
+    if (checkPhone) duplicados.push('Telefono ya registrado!')
 
-    let checkUsuario = await Empleado.findOne({where:{usuario: empleado.usuario}})
-    if(checkUsuario) duplicados.push('Usuario ya registrado!')
-    
+    let checkUsuario = await Empleado.findOne({ where: { usuario: empleado.usuario } })
+    if (checkUsuario) duplicados.push('Usuario ya registrado!')
+
     return duplicados
 }

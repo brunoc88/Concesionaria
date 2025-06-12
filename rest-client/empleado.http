@@ -1,12 +1,16 @@
+GET http://localhost:3000/empleado/crear
+
+###
 POST http://localhost:3000/empleado/alta
 Content-Type: application/json
 
 {
     "nombre": "Bruno",
     "apellido": "Cerutti",
-    "email": "bruno@gmail.com",
+    "email": "bruno88@gmail.com",
     "usuario": "bruno88",
-    "password": "123",
-    "telefono": "2657",
-    "dni": "123456"
+    "password": "123123",
+    "telefono": "111333",
+    "dni": "0002"
 }
+

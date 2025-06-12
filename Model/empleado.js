@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize')
-const { db } = require('../utils/confing')
+const sequelize = require('../db/db')
 
-const Empleado = db.define('Empleado', {
+const Empleado = sequelize.define('Empleado', {
     idEmpleado:{
         type: DataTypes.INTEGER,
         autoIncrement: true,

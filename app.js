@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const { db } = require('./utils/confing')
+const sequelize = require('./db/db')
 const logger = require('./utils/loggers')
 const methodOverride = require('method-override')
 
@@ -16,10 +16,10 @@ app.get('/', (req, res) => {
     res.send('Hola!')
 })
 
-db.sync({})
+sequelize.sync({})
     .then(() => {
         logger.info('Base de datos sincronizada');
-        logger.info(db.models);
+        logger.info(sequelize.models);
     })
     .catch((err) => {
         logger.error('Error al sincronizar la base de datos', err);
