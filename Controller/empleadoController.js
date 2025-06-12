@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 exports.altaEmpleado = async(req, res)=>{
     try {
         const data = req.body
-        const duplicado = checkDuplicados()
+        const duplicado = checkDuplicados(data)
 
         if(duplicado.length > 0){
             return res.status(409)
