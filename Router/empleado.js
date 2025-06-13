@@ -5,7 +5,7 @@ const { checkToken }= require('../utils/middlewares')
 
 router.get('/miPerfil/:id', checkToken, empleadoController.myProfile)
 
-router.get('/crear', empleadoController.indexFormularioEmpleado)
+router.get('/crear', empleadoController.formularioEmpleado)
 
 router.post('/alta', empleadoController.altaEmpleado)
 

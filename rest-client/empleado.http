@@ -27,8 +27,8 @@ PUT http://localhost:3000/empleado/editar/5
 Content-Type: application/json
 
 {
-    "nombre": "Bruno Alberto",
-    "apellido": "Cerutti Sarivia",
+    "nombre": "Bruno",
+    "apellido": "Cerutti",
     "email": "bruno88@gmail.com",
     "usuario": "bruno88",
     "password": "123456",

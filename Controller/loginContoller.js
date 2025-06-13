@@ -4,6 +4,14 @@ const jwt = require('jsonwebtoken')
 const { SECRET } = require('../utils/confing')
 const { Op } = require('sequelize')
 
+exports.loginVista = async (req, res) =>{
+    try {
+        return res.status(200).render('home/login')
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+    }
+}
+
 exports.login = async (req, res) => {
     try {
         const { user, password } = req.body

@@ -1,9 +1,9 @@
 const Empleado = require('../Model/empleado')
 const bcrypt = require('bcrypt')
 
-exports.indexFormularioEmpleado = async (req, res) => {
+exports.formularioEmpleado = async (req, res) => {
     try {
-        return res.status(200).json('INDEX')
+        return res.status(200).render('empleado/alta')
     } catch (error) {
         return res.status(500).json(`Hubo un error ${error}`)
     }
@@ -17,8 +17,8 @@ exports.myProfile = async (req, res) => {
 
         if (empleado.idEmpleado !== req.user.id) return res.status(401).json({ alerta: 'Sin authorizacion!' })
 
-
-        return res.status(200).json(req.user)
+        //return res.status(200).json(req.user)
+        return res.status(200).render('empleado/perfil',{empleado})
 
     } catch (error) {
         return res.status(500).json(`Hubo un error: ${error}`)
@@ -32,10 +32,11 @@ exports.altaEmpleado = async (req, res) => {
         const duplicado = await checkDuplicados(data, modeEdit, req)
 
         if (duplicado.length >= 1) {
-            return res.status(409).json({
+            /*return res.status(409).json({
                 mensaje: "Error de duplicado",
                 duplicados: duplicado
-            })
+            })*/
+           return res.status(409).render('empleado/alta',{empleado:data})
         }
 
         if (data.usuario.length < 5) {
@@ -59,7 +60,8 @@ exports.altaEmpleado = async (req, res) => {
         }
 
         await Empleado.create(nuevoEmpleado)
-        return res.status(201).json("empleado creado!")
+        //return res.status(201).json("empleado creado!")
+        return res.status(201).redirect('/empleado/alta')
 
     } catch (error) {
         return res.status(500).json(`Ocurrio un error: ${error}`)

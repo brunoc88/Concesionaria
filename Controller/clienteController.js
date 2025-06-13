@@ -4,7 +4,8 @@ exports.infoCliente = async(req, res) =>{
     try {
         const id = req.params.id
         const cliente = await Cliente.findByPk(id)
-        return res.status(200).json(cliente)
+        //return res.status(200).json(cliente)
+        return res.status(200).render('cliente/perfil',{cliente})
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }

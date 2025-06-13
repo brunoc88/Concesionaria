@@ -5,16 +5,21 @@ const logger = require('./utils/loggers')
 const methodOverride = require('method-override')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
+const path = require('path')
 //
 const loginRouter = require('./Router/login')
 const empleadoRouter = require('./Router/empleado')
 const clienteRouter = require('./Router/cliente')
-//middleware
-app.use(methodOverride('_method'));
-app.use(express.json())
 
+//middlewares
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+app.use(methodOverride('_method'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 // Usamos cookie-parser para manejar las cookies
-app.use(cookieParser());
+app.use(cookieParser())
 
 
 app.use('/', loginRouter)
@@ -24,11 +29,11 @@ app.use('/cliente', clienteRouter)
 
 sequelize.sync({})
     .then(() => {
-        logger.info('Base de datos sincronizada');
-        logger.info(sequelize.models);
+        logger.info('Base de datos sincronizada')
+        logger.info(sequelize.models)
     })
     .catch((err) => {
-        logger.error('Error al sincronizar la base de datos', err);
+        logger.error('Error al sincronizar la base de datos', err)
     });
 
 module.exports = app

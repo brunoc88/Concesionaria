@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-6
+        .card.shadow-lg.rounded
+          .card-body
+            h3.card-title.text-center Perfil de Empleado
+            hr
+            ul.list-group.list-group-flush
+              li.list-group-item
+                strong Nombre: 
+                |  #{empleado.nombre}
+              li.list-group-item
+                strong Apellido: 
+                |  #{empleado.apellido}
+              li.list-group-item
+                strong DNI: 
+                |  #{empleado.dni}
+              li.list-group-item
+                strong Email: 
+                |  #{empleado.email}
+              li.list-group-item
+                strong Teléfono: 
+                |  #{empleado.telefono}
+              li.list-group-item
+                strong Usuario: 
+                |  #{empleado.usuario}
+
+            .mt-4.d-flex.justify-content-between
+              a.btn.btn-primary(href=`/empleado/editar/5`) Editar
+              form(action=`/empleado/baja/`, method='post', onsubmit="return confirm('¿Estás seguro que deseas eliminar tu cuenta?');")
+                button.btn.btn-danger(type='submit') Eliminar
+              a.btn.btn-secondary(href='/dashboard') Volver
