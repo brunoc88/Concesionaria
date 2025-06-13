@@ -1,11 +1,27 @@
 const Empleado = require('../Model/empleado')
 const bcrypt = require('bcrypt')
 
-exports.indexFormularioEmpleado = async (req, res) =>{
+exports.indexFormularioEmpleado = async (req, res) => {
     try {
         return res.status(200).json('INDEX')
     } catch (error) {
         return res.status(500).json(`Hubo un error ${error}`)
+    }
+}
+
+exports.myProfile = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const empleado = await Empleado.findByPk(id)
+
+        if (empleado.idEmpleado !== req.user.id) return res.status(401).json({ alerta: 'Sin authorizacion!' })
+
+
+        return res.status(200).json(req.user)
+
+    } catch (error) {
+        return res.status(500).json(`Hubo un error: ${error}`)
     }
 }
 
@@ -55,13 +71,33 @@ exports.desactivarCuenta = async (req, res) => {
         const { id } = req.params
 
         const empleado = await Empleado.findByPk(id)
-        if(!empleado) return res.status(404).json('Empleado no encontrado')
+        if (!empleado) return res.status(404).json('Empleado no encontrado')
 
-        await Empleado.update({estado:false}, {where:{idEmpleado:id}})
+        if (empleado.usuario !== req.user.usuario) return res.status(401).json({ alerta: 'Sin authorizacion!' })
+
+        await Empleado.update({ estado: false }, { where: { idEmpleado: id } })
         return res.status(200).json('Cuenta desactivada!')
     } catch (error) {
         return res.status(500).json(`Hubo un error: ${error}`)
     }
+}
+
+exports.editarEmpleado = async (req, res) => {
+  try {
+    const id = req.params.id
+    const cambios = await checkCambios(req.body, id)
+
+    if (Object.keys(cambios).length === 0) {
+      return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+    }
+
+    await Empleado.update(cambios, { where: { idEmpleado: id } })
+
+    return res.status(200).json({ mensaje: 'Empleado actualizado', cambios })
+  } catch (error) {
+    console.log(`Hubo un error: ${error}`)
+    return res.status(500).json({ error: 'Error al editar el empleado' })
+  }
 }
 
 const checkDuplicados = async (empleado) => {
@@ -82,3 +118,22 @@ const checkDuplicados = async (empleado) => {
 
     return duplicados
 }
+
+const checkCambios = async (empleado, id) => {
+    let empleadoDB = await Empleado.findByPk(id)
+    let cambios = {}
+
+    if (empleado.usuario !== empleadoDB.usuario) cambios.usuario = empleado.usuario
+    if (empleado.nombre !== empleadoDB.nombre) cambios.nombre = empleado.nombre
+    if (empleado.apellido !== empleadoDB.apellido) cambios.apellido = empleado.apellido
+    if (empleado.email !== empleadoDB.email) cambios.email = empleado.email
+    if (empleado.telefono !== empleadoDB.telefono) cambios.telefono = empleado.telefono
+    if (empleado.dni !== empleadoDB.dni) cambios.dni = empleado.dni
+    let newPassword = await bcrypt.compare(empleado.password, empleadoDB.password)
+    if (!newPassword) {
+        const hashedPassword = await bcrypt.hash(empleado.password, 10)
+        cambios.password = hashedPassword
+    }
+
+    return cambios
+}   
