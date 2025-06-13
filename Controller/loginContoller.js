@@ -43,8 +43,8 @@ exports.login = async (req, res) => {
         // Limpiar cookies existentes y establecer una nueva
         res.clearCookie('token');
         res.cookie('token', token, {
-            httpOnly: true,
-            secure: true,
+            httpOnly: true, 
+            secure: false, 
             sameSite: 'strict',
             maxAge: 1000 * 60 * 60 // 1 hora
         })

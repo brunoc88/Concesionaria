@@ -1,8 +1,8 @@
 const router = require('express').Router()
-const { tokenExtractor } = require('../utils/middlewares')
+const { checkToken } = require('../utils/middlewares')
 const clienteController = require('../Controller/clienteController')
 
-router.use(tokenExtractor)
+router.use(checkToken)
 
 router.post('/alta', clienteController.altaCliente)
 

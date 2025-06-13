@@ -1,0 +1,92 @@
+Teoria de Cookies
+
+¿Por qué no hace falta limpiar 'Bearer ' en cookies?
+🔑 Porque las cookies no llevan prefijos como 'Bearer', simplemente almacenan el valor tal cual se lo das.
+En cookies: el token está en req.cookies.token → ya es el token limpio.
+
+En headers (con Authorization): vos mismo ponés el valor como:
+
+Authorization: Bearer eyJhbGciOi...
+
+Entonces tenés que remover el 'Bearer ' para obtener solo el token antes de verificarlo.
+
+🔁 Resumen:
+
+Fuente	            Formato recibido	            ¿Hay que limpiar?
+Authorization	     "Bearer eyJh...xyz"	            ✅ Sí, remover "Bearer "
+Cookie	           "token=eyJh...xyz"	              ❌ No, ya viene limpio
+
+🍪 res.cookie() – ¿Qué hace y qué significan sus opciones?
+📌 Sintaxis:
+
+res.cookie(nombre, valor, opciones)
+Ejemplo:
+
+res.cookie('token', token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'strict',
+  maxAge: 1000 * 60 * 60 // 1 hora
+})
+
+
+🔍 Opciones explicadas:
+Propiedad	                   Qué hace
+httpOnly	                   Impide que el cliente acceda al token desde document.cookie (más seguro)
+secure	                     Solo envía la cookie por HTTPS. En desarrollo podés ponerlo en false
+sameSite	                   Previene ataques CSRF (strict = no enviar en cross-site requests)
+maxAge	                     Tiempo de vida de la cookie en milisegundos (1 hora en el ejemplo)
+path	                       Opcional. Define en qué rutas se manda la cookie ('/' por defecto)
+
+❌ res.clearCookie() – ¿Qué hace?
+Elimina la cookie en el navegador del cliente. Internamente lo que hace es:
+
+Mandar una cookie con el mismo nombre y:
+
+Expirada (expires en el pasado)
+
+Sin valor
+
+
+res.clearCookie('token')
+
+
+✅ Es útil para:
+Logout
+
+Revocar sesión
+
+Eliminar cookies de forma segura
+
+❓ ¿res.cookie() y res.clearCookie() son propiedades de res?
+Sí, son métodos propios del objeto res (response) provisto por Express. No los creás vos, vienen integrados cuando usás cookie-parser.
+
+Cuando hacés esto:
+
+app.use(cookieParser())
+Estás extendiendo req y res para que puedan:
+
+Leer cookies (req.cookies) 
+
+Escribir cookies (res.cookie)
+
+Borrar cookies (res.clearCookie)
+
+📌 Conclusión rápida
+Cookies no tienen prefijo, el token viene limpio.
+
+Authorization sí lo tiene, por eso hay que quitar 'Bearer ' antes de usarlo.
+
+res.cookie y res.clearCookie vienen del middleware cookie-parser.
+
+Las propiedades (httpOnly, secure, sameSite, etc.) son configuraciones de seguridad estándar.
+
+MAS SOBRE SECURE:
+
+
+Si estás en desarrollo, y configurás la cookie con secure: false, todo va a seguir funcionando perfectamente mientras estés trabajando en http://localhost.
+
+Sí, es exactamente como decís:
+secure: false → la cookie se enviará en peticiones HTTP normales, como las de localhost en desarrollo.
+
+secure: true → la cookie solo se enviará si la conexión es HTTPS, lo cual es lo correcto en producción para mantener la seguridad.

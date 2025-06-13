@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../utils/confing')
 
-const tokenExtractor = (req, res, next) =>{
+const checkToken = (req, res, next) =>{
     try {
         const token = req.cookies.token
 
@@ -18,5 +18,5 @@ const tokenExtractor = (req, res, next) =>{
 }
 
 module.exports = {
-    tokenExtractor
+    checkToken
 }
