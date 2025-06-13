@@ -2,7 +2,22 @@ POST http://localhost:3000/cliente/alta
 Content-Type: application/json
 
 {
-    "nombre": "Jorge",
+    "nombre": "Maria",
+    "apellido": "Gomez",
+    "email": "mgomez@gmail.com",
+    "telefono": "8888",
+    "dni": "0008"
+}
+
+###
+PATCH http://localhost:3000/cliente/baja/1
+
+###
+PUT  http://localhost:3000/cliente/editar/1
+Content-Type: application/json
+
+{
+    "nombre": "Jorge Raul",
     "apellido": "Cerutti",
     "email": "jorgec@gmail.com",
     "telefono": "111333",
@@ -10,4 +25,4 @@ Content-Type: application/json
 }
 
 ###
-PATCH http://localhost:3000/cliente/baja/1
+GET http://localhost:3000/cliente/info/1

@@ -125,7 +125,7 @@ const checkDuplicados = async (empleado, modeEdit, req) => {
     }
 
     if (modeEdit) {
-        const id = req.user.id // o req.params.id si lo pasás por URL
+        const id = req.user.id 
         const empleadoDB = await Empleado.findByPk(id)
 
         let checkDni = await Empleado.findOne({ where: { dni: empleado.dni } })
