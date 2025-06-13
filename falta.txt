@@ -1,11 +1,5 @@
-Empleado:
-
-info del perfil
-editar perfil
-
-Cliente:
-info del cliente
-editar perfil
+VISTAS:
+TRABAJAR EN VISTAS
 
 Vehiculo:
 ABMC
