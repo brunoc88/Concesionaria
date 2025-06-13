@@ -28,8 +28,8 @@ exports.myProfile = async (req, res) => {
 exports.altaEmpleado = async (req, res) => {
     try {
         const data = req.body
-
-        const duplicado = await checkDuplicados(data)
+        const modeEdit = false //esto va determinar como se validan dupliocos tanto para post o put
+        const duplicado = await checkDuplicados(data, modeEdit, req)
 
         if (duplicado.length >= 1) {
             return res.status(409).json({
@@ -83,38 +83,73 @@ exports.desactivarCuenta = async (req, res) => {
 }
 
 exports.editarEmpleado = async (req, res) => {
-  try {
-    const id = req.params.id
-    const cambios = await checkCambios(req.body, id)
+    try {
+        const id = req.params.id
+        const modeEdit = true
 
-    if (Object.keys(cambios).length === 0) {
-      return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+        const duplicados = await checkDuplicados(req.body, modeEdit, req)
+        if (duplicados.length >= 1) {
+            return res.status(409).json({ mensaje: 'Valores duplicados!', duplicados: duplicados })
+        }
+        const cambios = await checkCambios(req.body, id)
+
+        if (Object.keys(cambios).length === 0) {
+            return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+        }
+
+        await Empleado.update(cambios, { where: { idEmpleado: id } })
+
+        return res.status(200).json({ mensaje: 'Empleado actualizado', cambios })
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+        return res.status(500).json({ error: 'Error al editar el empleado' })
     }
-
-    await Empleado.update(cambios, { where: { idEmpleado: id } })
-
-    return res.status(200).json({ mensaje: 'Empleado actualizado', cambios })
-  } catch (error) {
-    console.log(`Hubo un error: ${error}`)
-    return res.status(500).json({ error: 'Error al editar el empleado' })
-  }
 }
 
-const checkDuplicados = async (empleado) => {
+const checkDuplicados = async (empleado, modeEdit, req) => {
 
     let duplicados = []
 
-    let checkDni = await Empleado.findOne({ where: { dni: empleado.dni } })
-    if (checkDni) duplicados.push('Dni ya registrado!')
+    if (!modeEdit) {
+        let checkDni = await Empleado.findOne({ where: { dni: empleado.dni } })
+        if (checkDni) duplicados.push('Dni ya registrado!')
 
-    let checkEmail = await Empleado.findOne({ where: { email: empleado.email } })
-    if (checkEmail) duplicados.push('Email ya registrado!')
+        let checkEmail = await Empleado.findOne({ where: { email: empleado.email } })
+        if (checkEmail) duplicados.push('Email ya registrado!')
 
-    let checkPhone = await Empleado.findOne({ where: { telefono: empleado.telefono } })
-    if (checkPhone) duplicados.push('Telefono ya registrado!')
+        let checkPhone = await Empleado.findOne({ where: { telefono: empleado.telefono } })
+        if (checkPhone) duplicados.push('Telefono ya registrado!')
 
-    let checkUsuario = await Empleado.findOne({ where: { usuario: empleado.usuario } })
-    if (checkUsuario) duplicados.push('Usuario ya registrado!')
+        let checkUsuario = await Empleado.findOne({ where: { usuario: empleado.usuario } })
+        if (checkUsuario) duplicados.push('Usuario ya registrado!')
+    }
+
+    if (modeEdit) {
+        const id = req.user.id // o req.params.id si lo pasás por URL
+        const empleadoDB = await Empleado.findByPk(id)
+
+        let checkDni = await Empleado.findOne({ where: { dni: empleado.dni } })
+        if (checkDni && checkDni.idEmpleado !== empleadoDB.idEmpleado) {
+            duplicados.push('Dni ya registrado!')
+        }
+
+        let checkEmail = await Empleado.findOne({ where: { email: empleado.email } })
+        if (checkEmail && checkEmail.idEmpleado !== empleadoDB.idEmpleado) {
+            duplicados.push('Email ya registrado!')
+        }
+
+        let checkPhone = await Empleado.findOne({ where: { telefono: empleado.telefono } })
+        if (checkPhone && checkPhone.idEmpleado !== empleadoDB.idEmpleado) {
+            duplicados.push('Telefono ya registrado!')
+        }
+
+        let checkUsuario = await Empleado.findOne({ where: { usuario: empleado.usuario } })
+        if (checkUsuario && checkUsuario.idEmpleado !== empleadoDB.idEmpleado) {
+            duplicados.push('Usuario ya registrado!')
+        }
+    }
+
+
 
     return duplicados
 }

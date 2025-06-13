@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "user":"bruno88",
-    "password":"123123"
+    "password":"123456"
 }
 ###
 GET http://localhost:3000/logout

@@ -5,13 +5,13 @@ POST http://localhost:3000/empleado/alta
 Content-Type: application/json
 
 {
-    "nombre": "Jorge",
+    "nombre": "Alberto",
     "apellido": "Cerutti",
-    "email": "jorge@gmail.com",
-    "usuario": "jorge60",
-    "password": "000000",
-    "telefono": "000",
-    "dni": "000"
+    "email": "alberto@gmail.com",
+    "usuario": "alberto65",
+    "password": "11111",
+    "telefono": "00011",
+    "dni": "00011"
 }
 
 ###
