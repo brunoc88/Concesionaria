@@ -23,7 +23,7 @@ const Vehiculo = sequelize.define('Vehiculo', {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    cantida: {
+    cantidad: {
         type: DataTypes.INTEGER,
         allowNull: false
     },

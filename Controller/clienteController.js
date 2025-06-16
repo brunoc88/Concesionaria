@@ -1,5 +1,14 @@
 const Cliente = require('../Model/cliente')
 
+exports.allClients = async(req, res) =>{
+    try {
+        const clientes = await Cliente.findAll()
+        return res.status(200).json(clientes)
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+    }
+}
+
 exports.infoCliente = async(req, res) =>{
     try {
         const id = req.params.id
