@@ -12,4 +12,7 @@ router.put('/editar/:id', clienteController.editarCliente)
 
 router.patch('/baja/:id', clienteController.baja)
 
+router.patch('/activar/:id', clienteController.activar)
+
+
 module.exports = router

@@ -26,3 +26,6 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/cliente/info/1
+
+###
+PATCH http://localhost:3000/cliente/activar/1

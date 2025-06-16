@@ -69,6 +69,20 @@ exports.baja = async (req, res) => {
     }
 }
 
+exports.activar = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const cliente = await Cliente.findByPk(id)
+        if (!cliente) return res.status(404).json('Cliente no encontrado')
+
+        await Cliente.update({ estado: true }, { where: { idCliente: id } })
+        return res.status(200).json('Cliente activado!')
+    } catch (error) {
+        console.log(`Ocurrio un error: ${error}`)
+    }
+}
+
 const checkDuplicados = async (cliente, modeEdit, id) => {
 
     let duplicados = []

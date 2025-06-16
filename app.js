@@ -10,11 +10,13 @@ const path = require('path')
 const loginRouter = require('./Router/login')
 const empleadoRouter = require('./Router/empleado')
 const clienteRouter = require('./Router/cliente')
+const vehiculoRouter = require('./Router/vehiculo')
 
-//middlewares
-
+//configuro pug
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+
+//middlewares
 app.use(methodOverride('_method'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -25,6 +27,7 @@ app.use(cookieParser())
 app.use('/', loginRouter)
 app.use('/empleado', empleadoRouter)
 app.use('/cliente', clienteRouter)
+app.use('/vehiculo', vehiculoRouter)
 
 
 sequelize.sync({})
