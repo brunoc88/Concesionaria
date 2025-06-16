@@ -21,3 +21,16 @@ GET  http://localhost:3000/vehiculo/todos
 
 ###
 GET  http://localhost:3000/vehiculo/info/1
+
+###
+PUT http://localhost:3000/vehiculo/editar/1
+Content-Type: application/json
+
+{
+    "modelo": "Voyage",
+    "marca": "Volkswagen",
+    "anio": 2014,
+    "color": "blanco",
+    "cantidad": 5,
+    "precio": 2000
+}

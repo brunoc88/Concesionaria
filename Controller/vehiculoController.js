@@ -35,6 +35,31 @@ exports.altaVehiculo = async(req, res) =>{
     }
 }
 
+exports.editarVehiculo = async(req, res) =>{
+    try {
+        const id = req.params.id
+        const vehiculo = req.body
+
+        const duplicado = await checkDuplicado(vehiculo, id)
+        if(duplicado){
+            return res.status(409).json(duplicado)
+        }
+
+        const cambios = await chekCambios(vehiculo, id)
+        if(Object.keys(cambios).length === 0){
+            return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+        }
+
+        await Vehiculo.update(cambios,{where:{idVehiculo:id}})
+
+        return res.status(200).json({ mensaje: 'Vehículo actualizado!', cambios })
+
+        
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+    }
+}
+
 exports.baja = async(req, res) =>{
     try {
         const { id } = req.params
@@ -57,4 +82,36 @@ exports.activar = async(req, res) =>{
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }
+}
+
+const checkDuplicado = async(vehiculo, id) =>{
+
+    let duplicado = null
+
+    const {modelo, marca, anio, color} = vehiculo
+    //busco vehiculo en la DB
+    const vehiculoDB = await Vehiculo.findByPk(id)
+
+    //busco si existe coincidencia con lo que mando el usuario
+    const vehiculoEdit = await Vehiculo.findOne({where:{modelo, marca, color, anio}})
+
+    if(vehiculoEdit && vehiculoEdit.idVehiculo !== vehiculoDB.idVehiculo){
+        duplicado = 'Ya existe ese vehiculo!'    
+    }
+    return duplicado
+}
+
+const chekCambios = async (vehiculo, id) =>{
+    let cambios = {}
+    //busco el vehiculo en la DB
+    const vehiculoDB = await Vehiculo.findByPk(id)
+
+    if(vehiculo.marca && vehiculo.marca !== vehiculoDB.marca) cambios.marca = vehiculo.marca
+    if(vehiculo.modelo && vehiculo.modelo !== vehiculoDB.modelo) cambios.modelo = vehiculo.modelo
+    if(vehiculo.anio && vehiculo.anio !== vehiculoDB.anio) cambios.anio = vehiculo.anio
+    if(vehiculo.color && vehiculo.color !== vehiculoDB.color) cambios.color = vehiculo.color
+    if(vehiculo.precio && vehiculo.precio !== vehiculoDB.precio) cambios.precio = vehiculo.precio
+    if(vehiculo.cantidad && vehiculo.cantidad !== vehiculoDB.cantidad) cambios.cantidad = vehiculo.cantidad
+
+    return cambios
 }

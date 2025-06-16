@@ -10,6 +10,8 @@ router.get('/info/:id', vehiculoController.info)
 
 router.post('/alta', vehiculoController.altaVehiculo)
 
+router.put('/editar/:id', vehiculoController.editarVehiculo)
+
 router.patch('/baja/:id', vehiculoController.baja)
 
 router.patch('/activar/:id', vehiculoController.activar)

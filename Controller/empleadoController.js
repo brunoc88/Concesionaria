@@ -18,7 +18,7 @@ exports.myProfile = async (req, res) => {
         if (empleado.idEmpleado !== req.user.id) return res.status(401).json({ alerta: 'Sin authorizacion!' })
 
         //return res.status(200).json(req.user)
-        return res.status(200).render('empleado/perfil',{empleado})
+        return res.status(200).render('empleado/perfil', { empleado })
 
     } catch (error) {
         return res.status(500).json(`Hubo un error: ${error}`)
@@ -36,7 +36,7 @@ exports.altaEmpleado = async (req, res) => {
                 mensaje: "Error de duplicado",
                 duplicados: duplicado
             })*/
-           return res.status(409).render('empleado/alta',{empleado:data})
+            return res.status(409).render('empleado/alta', { empleado: data })
         }
 
         if (data.usuario.length < 5) {
@@ -127,7 +127,13 @@ const checkDuplicados = async (empleado, modeEdit, req) => {
     }
 
     if (modeEdit) {
-        const id = req.user.id 
+        // Aquí verifico si, por alguna razón, se están enviando datos que ya pertenecen a otro usuario.
+        // Por ejemplo, si conozco los datos de "José" y trato de editar mi cuenta usando su DNI o email.
+        // Lo que hace esta validación es buscar si esos datos ya existen en otro registro (por ejemplo, el de José).
+        // Si encuentra una coincidencia pero el id de ese registro es distinto al mío (ej: el de José es 2 y el mío es 1),
+        // entonces se considera un dato duplicado y no se permite continuar.
+
+        const id = req.user.id
         const empleadoDB = await Empleado.findByPk(id)
 
         let checkDni = await Empleado.findOne({ where: { dni: empleado.dni } })
