@@ -11,6 +11,7 @@ const loginRouter = require('./Router/login')
 const empleadoRouter = require('./Router/empleado')
 const clienteRouter = require('./Router/cliente')
 const vehiculoRouter = require('./Router/vehiculo')
+const contratoRouter = require('./Router/contrato')
 
 //configuro pug
 app.set('view engine', 'pug');
@@ -28,7 +29,7 @@ app.use('/', loginRouter)
 app.use('/empleado', empleadoRouter)
 app.use('/cliente', clienteRouter)
 app.use('/vehiculo', vehiculoRouter)
-
+app.use('/contrato', contratoRouter)
 
 sequelize.sync({})
     .then(() => {
