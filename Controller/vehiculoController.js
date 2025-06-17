@@ -3,7 +3,8 @@ const Vehiculo = require('../Model/vehiculo')
 exports.todos = async(req, res) =>{
     try {
         const vehiculos = await Vehiculo.findAll()
-        return res.status(200).json(vehiculos)
+        //return res.status(200).json(vehiculos)
+        return res.status(200).render('vehiculo/index',{vehiculos})
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }
@@ -14,6 +15,14 @@ exports.info = async (req, res) =>{
         const { id } = req.params
         const vehiculo = await Vehiculo.findByPk(id)
         return res.status(200).json(vehiculo)
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+    }
+}
+
+exports.registrar = async(req, res) =>{
+    try {
+        return res.status(200).render('vehiculo/alta')
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }
@@ -63,8 +72,11 @@ exports.editarVehiculo = async(req, res) =>{
 exports.baja = async(req, res) =>{
     try {
         const { id } = req.params
+        const vehiculo = await Vehiculo.findByPk(id)
         await Vehiculo.update({estado:false},{where:{idVehiculo: id}})
-        return res.status(200).json('Vehiculo desactivado!')
+        //return res.status(200).json('Vehiculo desactivado!')
+        req.session.message = `Vehiculo: ${vehiculo.marca} ${vehiculo.modelo} desactivado!`
+        return res.status(200).redirect('/vehiculo/index')
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }
@@ -74,11 +86,19 @@ exports.activar = async(req, res) =>{
     try {
         const { id } = req.params
         const findVehiculo = await Vehiculo.findByPk(id)
+        //obtengo todos los vehiculos por si hay un error
+        const vehiculos = await Vehiculo.findAll()
         if(findVehiculo && findVehiculo.cantidad === 0){
-            return res.status(404).json('No puedo activar este modelo: La cantidad de unidades es 0')
+            //return res.status(400).json('No puedo activar este modelo: La cantidad de unidades es 0')
+            return res.status(400).render('vehiculo/index',{
+                vehiculos,
+                errorMessage:`No puedo activar este modelo: ${findVehiculo.marca} ${findVehiculo.modelo} La cantidad de unidades es 0. Edite el vehiculo!`
+            })
         }
         await Vehiculo.update({estado:true},{where:{idVehiculo: id}})
-        return res.status(200).json('Vehiculo activado!')
+        //return res.status(200).json('Vehiculo activado!')
+        req.session.message = `Vehiculo: ${findVehiculo.marca} ${findVehiculo.modelo} Activado!`
+        return res.status(200).redirect('/vehiculo/index')
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }

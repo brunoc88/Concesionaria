@@ -1,0 +1,62 @@
+extends ../layout 
+
+block content 
+
+  if errorMessage
+    if Array.isArray(errorMessage)
+      .alert.alert-danger(role="alert")
+        ul.mb-0
+          each e in errorMessage
+            li #{e}
+    else
+      .alert.alert-danger(role="alert") #{errorMessage}
+
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-8
+        .card.shadow-lg
+          .card-header.bg-primary.text-white.text-center
+            h4.mb-0 Alta de Vehículo
+          .card-body
+            form(action="/vehiculo/alta", method="post")
+              .mb-3
+                label.form-label(for="modelo") Modelo:
+                input.form-control(type="text" name="modelo" id="modelo" required)
+
+              .mb-3
+                label.form-label(for="marca") Marca:
+                select.form-select(name="marca" id="marca" required)
+                  option(value="" disabled selected) Seleccionar marca
+                  option(value="Ford") Ford
+                  option(value="Chevrolet") Chevrolet
+                  option(value="Renault") Renault
+                  option(value="Citroen") Citroen
+                  option(value="Volkswagen") Volkswagen
+
+              .mb-3
+                label.form-label(for="color") Color:
+                select.form-select(name="color" id="color" required)
+                  option(value="" disabled selected) Seleccionar color
+                  option(value="Blanco") Blanco
+                  option(value="Negro") Negro
+                  option(value="Gris") Gris
+                  option(value="Rojo") Rojo
+                  option(value="Azul") Azul
+                  option(value="Verde") Verde
+                  option(value="Naranja") Naranja
+
+              .mb-3
+                label.form-label(for="anio") Año:
+                input.form-control(type="number" name="anio" id="anio" min="1900" max="2099" required)
+
+              .mb-3
+                label.form-label(for="cantidad") Cantidad:
+                input.form-control(type="number" name="cantidad" id="cantidad" min="1" required)
+
+              .mb-3
+                label.form-label(for="precio") Precio:
+                input.form-control(type="number" name="precio" id="precio" step="0.01" min="0" required)
+
+              .d-flex.justify-content-between.mt-4
+                button.btn.btn-success(type="submit") Enviar
+                a.btn.btn-secondary(href="/vehiculo/index") Volver

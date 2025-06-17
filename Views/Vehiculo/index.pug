@@ -1,0 +1,55 @@
+extends ../layout 
+
+block content 
+
+    if message
+      .alert.alert-success(role="alert") #{message}
+
+    if errorMessage
+        if Array.isArray(errorMessage)
+            .alert.alert-danger(role="alert")
+                ul.mb-0
+                    each e in errorMessage
+                        li #{e}
+        else
+            .alert.alert-danger(role="alert") #{errorMessage}
+
+    h1.text-center Listado de Vehiculos 
+
+    div 
+        if vehiculos.length === 0
+            p.text-center No tienes Vehiculos
+        else 
+            table#myTable.table.table-striped 
+                thead 
+                    tr 
+                        th id
+                        th Modelo 
+                        th Marca 
+                        th Color 
+                        th Año 
+                        th Cantidad 
+                        th Precio 
+                        th Estado 
+                        th Opciones
+                tbody 
+                    each v in vehiculos 
+                        tr
+                            td #{v.idVehiculo}
+                            td #{v.modelo}
+                            td #{v.marca}
+                            td #{v.color}
+                            td #{v.anio}
+                            td #{v.cantidad}
+                            td #{v.precio}
+                            td #{v.estado? 'activo': 'inactivo'}
+                            td.btn-group 
+                                form(action="", method="post") 
+                                    button(type = "submit" class="btn btn-dark") Editar
+                                if v.estado 
+                                    form(action=`/vehiculo/baja/${v.idVehiculo}?_method=PATCH`, method="POST", onsubmit="return confirm('¿Desea realmente desactivar este Vehiculo?');")
+                                        button(type="submit" class="btn btn-danger") Desactivar
+                                else
+                                    form(action=`/vehiculo/activar/${v.idVehiculo}?_method=PATCH`, method="post")
+                                        button(type="submit" class="btn btn-success") Activar 
+        
