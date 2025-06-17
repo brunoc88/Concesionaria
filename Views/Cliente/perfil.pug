@@ -27,7 +27,13 @@ block content
               
 
             .mt-4.d-flex.justify-content-between
+              form(action="", method="get") 
+                button(type="submit" class="btn btn-dark") Contratos
               a.btn.btn-primary(href=`/empleado/editar/5`) Editar
-              form(action=`/empleado/baja/`, method='post', onsubmit="return confirm('¿Estás seguro que deseas eliminar tu cuenta?');")
-                button.btn.btn-danger(type='submit') Eliminar
+              if cliente.estado 
+                form(action=`/cliente/baja/${cliente.idCliente}?_method=PATCH`, method="POST", onsubmit="return confirm(`¿Desea realmente desactivar este alumno?');")
+                  button(type="submit" class="btn btn-danger") Desactivar
+              else 
+                form(action=`/cliente/activar/${cliente.idCliente}?_method=PATCH`, method="post")
+                  button(type="submit" class="btn btn-success") Activar 
               a.btn.btn-secondary(href='/cliente/index') Volver

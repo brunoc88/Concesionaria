@@ -2,8 +2,8 @@ extends ../layout
 
 block content 
 
-    .class-success 
-        if message 
+    if message
+      .alert.alert-success(role="alert") #{message}
 
     h1.text-center Listado de Clientes 
 
@@ -38,9 +38,9 @@ block content
                                 form(action="", method="post") 
                                     button(type = "submit" class="btn btn-dark") Editar
                                 if c.estado 
-                                    form(action="", method="patch")
-                                        button(type = "submit" class="btn btn-danger") Desactivar
+                                    form(action=`/cliente/baja/${c.idCliente}?_method=PATCH`, method="POST", onsubmit="return confirm('¿Desea realmente desactivar este alumno?');")
+                                        button(type="submit" class="btn btn-danger") Desactivar
                                 else
-                                    form(action="", method="post")   
-                                        button(type ="submit" class ="btn btn-success") activar
+                                    form(action=`/cliente/activar/${c.idCliente}?_method=PATCH`, method="post")
+                                        button(type="submit" class="btn btn-success") Activar 
         

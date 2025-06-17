@@ -73,7 +73,9 @@ exports.baja = async (req, res) => {
         if (!cliente) return res.status(404).json('Cliente no encontrado')
 
         await Cliente.update({ estado: false }, { where: { idCliente: id } })
-        return res.status(200).json('Cliente desactivado!')
+        //return res.status(200).json('Cliente desactivado!')
+        req.session.message = `Cliente: ${cliente.nombre} ${cliente.apellido} desactivado!`
+        return res.status(200).redirect('/cliente/index')
     } catch (error) {
         console.log(`Ocurrio un error: ${error}`)
     }
@@ -87,7 +89,9 @@ exports.activar = async (req, res) => {
         if (!cliente) return res.status(404).json('Cliente no encontrado')
 
         await Cliente.update({ estado: true }, { where: { idCliente: id } })
-        return res.status(200).json('Cliente activado!')
+        //return res.status(200).json('Cliente activado!')
+        req.session.message = `Cliente: ${cliente.nombre} ${cliente.apellido} Activado!`
+        return res.status(200).redirect('/cliente/index')
     } catch (error) {
         console.log(`Ocurrio un error: ${error}`)
     }

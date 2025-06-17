@@ -26,12 +26,18 @@ exports.login = async (req, res) => {
         })
 
         if (!userDB || !userDB.estado) {
-            return res.status(404).json('Ingrese un email o usuario valido!')
+            //return res.status(404).json('Ingrese un email o usuario valido!')
+            return res.status(400).render('home/login',{
+                errorMessage: 'Ingrese un email o usuario valido!'
+            })
         }
 
         let checkPassword = await bcrypt.compare(password, userDB.password)
         if (!checkPassword) {
-            return res.status(404).json('Ingrese un email o usuario valido!')
+            //return res.status(400).json('Ingrese un email o usuario valido!')
+            return res.status(400).render('home/login',{
+                errorMessage: 'Ingrese un email o usuario valido!'
+            })
         }
 
         //generar token

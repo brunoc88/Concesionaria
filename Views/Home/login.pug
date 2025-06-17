@@ -10,6 +10,17 @@ html(lang="en")
   body
     if message
       .alert.alert-success(role="alert") #{message}
+
+    if errorMessage
+      if Array.isArray(errorMessage)
+        .alert.alert-danger(role="alert")
+          ul.mb-0
+            each e in errorMessage
+              li #{e}
+      else
+        .alert.alert-danger(role="alert") #{errorMessage}
+
+        
     .container.mt-5
       .row.justify-content-center
         .col-md-5

@@ -91,7 +91,8 @@ exports.desactivarCuenta = async (req, res) => {
         if (empleado.usuario !== req.user.usuario) return res.status(401).json({ alerta: 'Sin authorizacion!' })
 
         await Empleado.update({ estado: false }, { where: { idEmpleado: id } })
-        return res.status(200).json('Cuenta desactivada!')
+        //return res.status(200).json('Cuenta desactivada!')
+        return res.status(200).redirect('/')
     } catch (error) {
         return res.status(500).json(`Hubo un error: ${error}`)
     }

@@ -6,7 +6,7 @@ block content
       .col-md-6
         .card.shadow-lg.rounded
           .card-body
-            h3.card-title.text-center Perfil de Empleado
+            h3.card-title.text-center Mi Perfil
             hr
             ul.list-group.list-group-flush
               li.list-group-item
@@ -30,6 +30,6 @@ block content
 
             .mt-4.d-flex.justify-content-between
               a.btn.btn-primary(href=`/empleado/editar/5`) Editar
-              form(action=`/empleado/baja/`, method='post', onsubmit="return confirm('¿Estás seguro que deseas eliminar tu cuenta?');")
+              form(action=`/empleado/baja/${empleado.idEmpleado}?_method=PATCH`, method='post', onsubmit="return confirm('¿Estás seguro que deseas eliminar tu cuenta?');")
                 button.btn.btn-danger(type='submit') Eliminar
               a.btn.btn-secondary(href='/cliente/index') Volver
