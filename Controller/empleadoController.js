@@ -36,15 +36,27 @@ exports.altaEmpleado = async (req, res) => {
                 mensaje: "Error de duplicado",
                 duplicados: duplicado
             })*/
-            return res.status(409).render('empleado/alta', { empleado: data })
+            //return res.status(409).render('empleado/alta', { empleado: data })
+            return res.status(409).render('empleado/alta',{
+                empleado: data,
+                errorMessage: duplicado
+            })
         }
 
         if (data.usuario.length < 5) {
-            return res.status(400).json("nombre de usuario muy corto")
+            //return res.status(400).json("nombre de usuario muy corto")
+            return res.status(400).render('empleado/alta',{
+                empleado: data,
+                errorMessage: "nombre de usuario muy corto"
+            })
         }
 
         if (data.password.length < 5) {
-            return res.status(400).json("password muy corto")
+            //return res.status(400).json("password muy corto")
+            return res.status(400).render('empleado/alta',{
+                empleado: data,
+                errorMessage: "password muy corto"
+            })
         }
 
         const hashpassword = await bcrypt.hash(data.password, 10)
@@ -61,7 +73,8 @@ exports.altaEmpleado = async (req, res) => {
 
         await Empleado.create(nuevoEmpleado)
         //return res.status(201).json("empleado creado!")
-        return res.status(201).redirect('/empleado/alta')
+        req.session.message = 'Registrado con exito!'
+        return res.status(201).redirect('/')
 
     } catch (error) {
         return res.status(500).json(`Ocurrio un error: ${error}`)

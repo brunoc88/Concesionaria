@@ -3,7 +3,8 @@ const Cliente = require('../Model/cliente')
 exports.allClients = async(req, res) =>{
     try {
         const clientes = await Cliente.findAll()
-        return res.status(200).json(clientes)
+        //return res.status(200).json(clientes)
+        return res.status(200).render('cliente/index', {clientes})
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }

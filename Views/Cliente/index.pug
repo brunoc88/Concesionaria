@@ -1,0 +1,46 @@
+extends ../layout 
+
+block content 
+
+    .class-success 
+        if message 
+
+    h1.text-center Listado de Clientes 
+
+    div 
+        if clientes.length === 0
+            p.text-center No tienes clientes
+        else 
+            table#myTable.table.table-striped 
+                thead 
+                    tr 
+                        th id
+                        th Nombre 
+                        th Apellido 
+                        th Dni 
+                        th Email 
+                        th Telefono 
+                        th Estado 
+                        th Opciones
+                tbody 
+                    each c in clientes 
+                        tr
+                            td #{c.idCliente}
+                            td #{c.nombre}
+                            td #{c.apellido}
+                            td #{c.dni}
+                            td #{c.email}
+                            td #{c.telefono}
+                            td #{c.estado? 'activo': 'inactivo'}
+                            td.btn-group 
+                                form(action=`/cliente/info/${c.idCliente}`, method="get")
+                                    button(type ="submit" class="btn btn-info") ver 
+                                form(action="", method="post") 
+                                    button(type = "submit" class="btn btn-dark") Editar
+                                if c.estado 
+                                    form(action="", method="patch")
+                                        button(type = "submit" class="btn btn-danger") Desactivar
+                                else
+                                    form(action="", method="post")   
+                                        button(type ="submit" class ="btn btn-success") activar
+        

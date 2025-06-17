@@ -1,0 +1,17 @@
+res.locals es un objeto especial de Express que te permite pasar variables desde tu middleware o rutas hacia las vistas renderizadas (como Pug, EJS, Handlebars, etc.).
+
+🧠 ¿Para qué sirve?
+Cuando usás res.render('vista', datos), estás pasando variables directamente.
+Pero con res.locals, podés definir variables globales que estén disponibles automáticamente en todas las vistas, sin tener que pasarlas manualmente cada vez.
+
+app.use((req, res, next) => {
+  res.locals.titulo = 'Mi sitio';
+  res.locals.user = req.user || null;
+  next();
+});
+
+✅ Ventajas de res.locals:
+Disponible en todas las vistas sin necesidad de pasar cada variable a mano.
+
+Ideal para info global como: usuario logueado, mensajes flash, títulos, etc.
+

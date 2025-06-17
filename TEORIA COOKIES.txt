@@ -90,3 +90,43 @@ Sí, es exactamente como decís:
 secure: false → la cookie se enviará en peticiones HTTP normales, como las de localhost en desarrollo.
 
 secure: true → la cookie solo se enviará si la conexión es HTTPS, lo cual es lo correcto en producción para mantener la seguridad.
+
+
+
+🔒 ¿Qué es SameSite?
+SameSite es una propiedad de seguridad que se le puede asignar a una cookie. Sirve para controlar cuándo se deben enviar las cookies en peticiones HTTP, especialmente entre sitios diferentes (cross-site). Ayuda a prevenir ataques como CSRF (Cross-Site Request Forgery).
+
+📘 Modos de SameSite:
+Strict
+La cookie solo se envía si la petición proviene del mismo sitio (mismo dominio).
+
+No se envía si hacés clic en un enlace desde otro sitio.
+
+🔒 Más seguro, pero puede romper funcionalidades como login con redirecciones externas.
+
+Lax
+La cookie se envía en algunas peticiones cross-site, como las de tipo GET desde enlaces, pero no en peticiones POST.
+
+Es un equilibrio entre seguridad y usabilidad.
+
+None
+La cookie se enviará siempre, incluso en peticiones entre sitios diferentes, pero solo si tiene Secure: true (es decir, solo por HTTPS).
+
+Ideal si tu frontend y backend están en dominios distintos, pero menos seguro si no lo manejás bien.
+
+🛡️ Ejemplo típico en Express:
+
+res.cookie('token', token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'Strict' // o 'Lax' o 'None'
+})
+
+
+✅ ¿Cuál usar?
+Strict: si todo pasa en el mismo dominio (por ejemplo, midominio.com).
+
+Lax: es el default en la mayoría de navegadores modernos, y es aceptable si hacés redirecciones desde otros sitios.
+
+None: si tenés frontend y backend separados en dominios diferentes (como frontend.com y api.com), pero siempre con HTTPS.
+

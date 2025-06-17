@@ -57,11 +57,13 @@ exports.login = async (req, res) => {
             maxAge: 1000 * 60 * 60 // 1 hora
         })
 
+        return res.status(200).redirect('/cliente/index')
+        /*
         return res.status(200).json({
             mensaje: `Bienvenido ${userDB.usuario}`,
             token,
             usuario: userDB
-        });
+        });*/
 
 
     } catch (error) {
@@ -71,5 +73,6 @@ exports.login = async (req, res) => {
 
 exports.logout = async  (req, res) => {
   res.clearCookie('token');
-  res.status(200).json({ mensaje: 'Sesión cerrada' });
+  //res.status(200).json({ mensaje: 'Sesión cerrada' });
+  return res.status(200).redirect('/')
 }

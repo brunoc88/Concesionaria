@@ -4,7 +4,7 @@ const clienteController = require('../Controller/clienteController')
 
 router.use(checkToken)
 
-router.get('/todos', clienteController.allClients)
+router.get('/index', clienteController.allClients)
 
 router.get('/info/:id', clienteController.infoCliente)
 
