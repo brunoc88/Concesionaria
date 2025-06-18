@@ -35,7 +35,7 @@ block content
                             td.btn-group 
                                 form(action=`/cliente/info/${c.idCliente}`, method="get")
                                     button(type ="submit" class="btn btn-info") ver 
-                                form(action="", method="post") 
+                                form(action=`/cliente/editar/${c.idCliente}`, method="get") 
                                     button(type = "submit" class="btn btn-dark") Editar
                                 form(action=`/contrato/info/${c.idCliente}`, method="get")
                                     button(type="submit" class="btn btn-warning") Contratos 

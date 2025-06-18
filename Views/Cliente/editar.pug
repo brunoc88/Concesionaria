@@ -19,9 +19,9 @@ block content
       .col-md-8
         .card.shadow-lg
           .card-header.bg-primary.text-white.text-center
-            h2.mb-0 Registro de Clientes
+            h2.mb-0 Editar de Cliente
           .card-body
-            form(action="/cliente/alta" method="post")
+            form(action=`/cliente/actualizar/${cliente.idCliente}?_method=PUT` method="post")
               .row.mb-3
                 .col-md-6
                   label.form-label(for="nombre") Nombre:

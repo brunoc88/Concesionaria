@@ -29,7 +29,8 @@ block content
             .mt-4.d-flex.justify-content-between
               form(action=`/contrato/info/${cliente.idCliente}`, method="get") 
                 button(type="submit" class="btn btn-dark") Contratos
-              a.btn.btn-primary(href=`/empleado/editar/5`) Editar
+              form(action=`/cliente/editar/${cliente.idCliente}`, method="get") 
+                  button(type = "submit" class="btn btn-primary") Editar
               if cliente.estado 
                 form(action=`/cliente/baja/${cliente.idCliente}?_method=PATCH`, method="POST", onsubmit="return confirm(`¿Desea realmente desactivar este alumno?');")
                   button(type="submit" class="btn btn-danger") Desactivar

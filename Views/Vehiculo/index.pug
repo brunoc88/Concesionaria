@@ -44,7 +44,7 @@ block content
                             td #{v.precio}
                             td #{v.estado? 'activo': 'inactivo'}
                             td.btn-group 
-                                form(action="", method="post") 
+                                form(action=`/vehiculo/actualizar/${v.idVehiculo}`, method="get") 
                                     button(type = "submit" class="btn btn-dark") Editar
                                 if v.estado 
                                     form(action=`/vehiculo/baja/${v.idVehiculo}?_method=PATCH`, method="POST", onsubmit="return confirm('¿Desea realmente desactivar este Vehiculo?');")

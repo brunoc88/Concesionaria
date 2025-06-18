@@ -12,7 +12,9 @@ router.get('/registrar', clienteController.registar)
 
 router.post('/alta', clienteController.altaCliente)
 
-router.put('/editar/:id', clienteController.editarCliente)
+router.get('/editar/:id', clienteController.editarForm)
+
+router.put('/actualizar/:id', clienteController.editarCliente)
 
 router.patch('/baja/:id', clienteController.baja)
 

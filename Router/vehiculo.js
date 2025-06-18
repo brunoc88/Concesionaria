@@ -12,6 +12,8 @@ router.get('/registrar', vehiculoController.registrar)
 
 router.post('/alta', vehiculoController.altaVehiculo)
 
+router.get('/actualizar/:id', vehiculoController.editarVehiculoForm)
+
 router.put('/editar/:id', vehiculoController.editarVehiculo)
 
 router.patch('/baja/:id', vehiculoController.baja)

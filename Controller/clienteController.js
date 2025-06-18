@@ -56,24 +56,59 @@ exports.altaCliente = async (req, res) => {
     }
 }
 
+exports.editarForm = async (req, res) => {
+    try {
+        const { id } = req.params
+        const cliente = await Cliente.findByPk(id)
+        return res.status(200).render('cliente/editar',{
+            cliente
+        })
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+    }
+}
+
 exports.editarCliente = async (req, res) => {
     try {
         const id = req.params.id
-
         const modeEdit = true
         const duplicados = await checkDuplicados(req.body, modeEdit, id)
 
         if (duplicados.length >= 1) {
-            return res.status(409).json({ mensaje: 'Valores duplicados!', duplicados:duplicados})
+            //return res.status(409).json({ mensaje: 'Valores duplicados!', duplicados:duplicados})
+            return res.status(409).render('cliente/editar',{
+                errorMessage: duplicados,
+                cliente: {
+                    idCliente: id,
+                    nombre: req.body.nombre,
+                    apellido: req.body.apellido,
+                    email: req.body.email,
+                    telefono: req.body.telefono,
+                    dni: req.body.dni
+                }
+            })
         }
         const cambios = await checkCambios(req.body, id)
 
         if (Object.keys(cambios).length === 0) {
-            return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+            //return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+            return res.status(400).render('cliente/editar',{
+                errorMessage: 'No hay cambios para aplicar.',
+                 cliente: {
+                    idCliente: id,
+                    nombre: req.body.nombre,
+                    apellido: req.body.apellido,
+                    email: req.body.email,
+                    telefono: req.body.telefono,
+                    dni: req.body.dni
+                }
+            })
         }
         await Cliente.update(cambios, { where: { idCliente: id } })
 
-        return res.status(200).json({ mensaje: 'Cliente actualizado', cambios })
+        //return res.status(200).json({ mensaje: 'Cliente actualizado', cambios })
+        req.session.message = `Cliente: ${req.body.nombre} ${req.body.apellido} actualizado`
+        return res.status(200).redirect('/cliente/index')
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }
