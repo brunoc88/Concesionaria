@@ -10,3 +10,6 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/contrato/info/1
+
+###
+GET http://localhost:3000/contrato/ver/10

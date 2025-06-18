@@ -27,7 +27,7 @@ block content
               
 
             .mt-4.d-flex.justify-content-between
-              form(action="", method="get") 
+              form(action=`/contrato/info/${cliente.idCliente}`, method="get") 
                 button(type="submit" class="btn btn-dark") Contratos
               a.btn.btn-primary(href=`/empleado/editar/5`) Editar
               if cliente.estado 

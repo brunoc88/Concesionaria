@@ -37,8 +37,11 @@ block content
                                     button(type ="submit" class="btn btn-info") ver 
                                 form(action="", method="post") 
                                     button(type = "submit" class="btn btn-dark") Editar
+                                form(action=`/contrato/info/${c.idCliente}`, method="get")
+                                    button(type="submit" class="btn btn-warning") Contratos 
+
                                 if c.estado 
-                                    form(action=`/cliente/baja/${c.idCliente}?_method=PATCH`, method="POST", onsubmit="return confirm('¿Desea realmente desactivar este alumno?');")
+                                    form(action=`/cliente/baja/${c.idCliente}?_method=PATCH`, method="POST", onsubmit="return confirm('¿Desea realmente desactivar este cliente?');")
                                         button(type="submit" class="btn btn-danger") Desactivar
                                 else
                                     form(action=`/cliente/activar/${c.idCliente}?_method=PATCH`, method="post")

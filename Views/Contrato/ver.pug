@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+  .container.mt-5
+    .card.shadow-lg
+      .card-header.bg-dark.text-white.text-center
+        h3.mb-0 Contrato N° #{contrato.idContrato}
+        small.text-muted Fecha: #{contrato.fecha}
+
+      .card-body
+        h4.text-primary Datos del Cliente
+        ul.list-group.mb-4
+          li.list-group-item Nombre: #{contrato.Cliente.nombre} #{contrato.Cliente.apellido}
+          li.list-group-item DNI: #{contrato.Cliente.dni}
+          li.list-group-item Email: #{contrato.Cliente.email}
+          li.list-group-item Teléfono: #{contrato.Cliente.telefono}
+
+        h4.text-primary Datos del Empleado
+        ul.list-group.mb-4
+          li.list-group-item Nombre: #{contrato.Empleado.nombre} #{contrato.Empleado.apellido}
+          li.list-group-item Usuario: #{contrato.Empleado.usuario}
+          li.list-group-item Email: #{contrato.Empleado.email}
+
+        h4.text-primary Vehículo Adquirido
+        ul.list-group.mb-4
+          li.list-group-item Marca/Modelo: #{contrato.Vehiculo.marca} #{contrato.Vehiculo.modelo}
+          li.list-group-item Año: #{contrato.Vehiculo.anio}
+          li.list-group-item Color: #{contrato.Vehiculo.color}
+          li.list-group-item Precio: $#{contrato.Vehiculo.precio}
+
+        h5.text-success.mt-4 Estado del Contrato: 
+          span= contrato.estado ? 'Activo' : 'Inactivo'
+
+      .card-footer.text-end
+        a.btn.btn-secondary(href=`/contrato/info/${contrato.Cliente.idCliente}`) Volver
+
+

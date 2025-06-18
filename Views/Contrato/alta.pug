@@ -1,0 +1,37 @@
+extends ../layout 
+
+block content 
+
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-8
+        .card.shadow-lg
+          .card-header.bg-primary.text-white.text-center
+            h4.mb-0 Registro Contractual del Vehículo
+
+          .card-body
+            form(action="/contrato/alta", method="post") 
+              
+              .mb-4
+                label.form-label.fw-bold(for="cliente") Cliente:
+                input.form-control(type="text", value=`${cliente.nombre} ${cliente.apellido} - DNI: ${cliente.dni}`, readonly)
+                input(type="hidden", name="id_cliente", value=cliente.idCliente)
+
+              .mb-4
+                label.form-label.fw-bold(for="empleado") Empleado:
+                input.form-control(type="text", value=`${empleado.nombre} ${empleado.apellido}`, readonly)
+                input(type="hidden", name="id_empleado", value=empleado.id)
+
+              .mb-4
+                label.form-label.fw-bold(for="vehiculo") Vehículo:
+                if vehiculos && vehiculos.length
+                  select.form-select(name="id_vehiculo", required)
+                    option(value="" disabled selected) Seleccionar Vehículo
+                    each v in vehiculos 
+                      option(value=v.idVehiculo) #{v.marca} #{v.modelo} #{v.color} #{v.anio} - $#{v.precio}
+                else 
+                  p.text-danger No hay vehículos disponibles
+
+              .d-flex.justify-content-between.mt-4
+                a.btn.btn-secondary(href="/cliente/index") Cancelar
+                button.btn.btn-success(type="submit") Confirmar Registro

@@ -1,0 +1,42 @@
+extends ../layout 
+
+block content 
+
+    if errorMessage
+      if Array.isArray(errorMessage)
+        .alert.alert-danger(role="alert")
+          ul.mb-0
+            each e in errorMessage
+              li #{e}
+      else
+        .alert.alert-danger(role="alert") #{errorMessage}
+
+    H1(class="text-center") Contratos de # #{cliente.idCliente} #{cliente.nombre} #{cliente.apellido}
+
+    if contratos.length === 0
+        h2(class="text-center") No tiene Ningun Contrato 
+
+    else 
+        table#myTable.table.table-striped
+            thead 
+                tr 
+                    th id
+                    th Vehiculo
+                    th Color
+                    th Precio
+                    th Fecha
+                    th Opciones
+            tbody
+                each c in contratos
+                    tr 
+                        td #{c.idContrato}
+                        td #{c.Vehiculo.marca} #{c.Vehiculo.modelo}
+                        td #{c.Vehiculo.color}
+                        td #{c.Vehiculo.precio}
+                        td #{c.fecha}
+                        td 
+                            form(action=`/contrato/ver/${c.idContrato}`, method="get")
+                                button(type="submit" class="btn btn-dark") Detalles
+    form(action=`/contrato/crear/${cliente.idCliente}`, method="get") 
+        button(type="submit" class="btn btn-success") Crear Contrato
+    
