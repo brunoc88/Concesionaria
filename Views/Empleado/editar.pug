@@ -1,0 +1,53 @@
+extends ../layout 
+
+block content 
+
+    if errorMessage
+      if Array.isArray(errorMessage)
+        .alert.alert-danger(role="alert")
+          ul.mb-0
+            each e in errorMessage
+              li #{e}
+      else
+        .alert.alert-danger(role="alert") #{errorMessage}
+
+
+    .container.mt-5
+    .row.justify-content-center
+      .col-md-8
+        .card.shadow-lg
+          .card-header.bg-primary.text-white.text-center
+            h2.mb-0 Editar Empleado
+          .card-body
+            form(action=`/empleado/editar/${empleado.idEmpleado}?_method=PUT` method="post")
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="nombre") Nombre:
+                  input.form-control(type="text" name="nombre" id="nombre" value = `${empleado?empleado.nombre:''}` required)
+                .col-md-6
+                  label.form-label(for="apellido") Apellido:
+                  input.form-control(type="text" name="apellido" id="apellido" value = `${empleado?empleado.apellido:''}` required)
+
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="usuario") Usuario:
+                  input.form-control(type="text" name="usuario" id="usuario" value = `${empleado?empleado.usuario:''}` required)
+                .col-md-6
+                  label.form-label(for="dni") DNI:
+                  input.form-control(type="text" name="dni" id="dni" value = `${empleado?empleado.dni:''}` required)
+
+              .row.mb-3
+                .col-md-6
+                  label.form-label(for="telefono") Teléfono:
+                  input.form-control(type="text" name="telefono" id="telefono" value = `${empleado?empleado.telefono:''}` required)
+                .col-md-6
+                  label.form-label(for="email") Email:
+                  input.form-control(type="email" name="email" id="email" value = `${empleado?empleado.email:''}` required)
+
+              .mb-3
+                label.form-label(for="password") Contraseña:
+                input.form-control(type="password" name="password" value = `${empleado?empleado.password:''}` id="password"  required)
+
+              .d-flex.justify-content-between.mt-4
+                button.btn.btn-success(type="submit") Enviar
+                a.btn.btn-secondary(href=`/empleado/miPerfil/${user.id}`) Volver

@@ -98,10 +98,25 @@ exports.desactivarCuenta = async (req, res) => {
     }
 }
 
+exports.actualizar = async (req, res) => {
+    try {
+        const { id } = req.params
+        const empleado = await Empleado.findByPk(id)
+        return res.status(200).render('empleado/editar',{
+            empleado,
+        })
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+    }
+}
+
 exports.editarEmpleado = async (req, res) => {
     try {
         const id = req.params.id
         const modeEdit = true
+
+        //busco empleado si hay error
+        const empleado = await Empleado.findByPk(id)
 
         const duplicados = await checkDuplicados(req.body, modeEdit, req)
         if (duplicados.length >= 1) {
@@ -110,12 +125,19 @@ exports.editarEmpleado = async (req, res) => {
         const cambios = await checkCambios(req.body, id)
 
         if (Object.keys(cambios).length === 0) {
-            return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+            //return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
+            return res.status(400).render('empleado/editar',{
+                errorMessage:'No hay cambios para aplicar.',
+                empleado
+            })
         }
 
         await Empleado.update(cambios, { where: { idEmpleado: id } })
 
-        return res.status(200).json({ mensaje: 'Empleado actualizado', cambios })
+        //return res.status(200).json({ mensaje: 'Empleado actualizado', cambios })
+        res.clearCookie('token')
+        req.session.message = 'Empleado actualizado'
+        return res.status(200).redirect('/')
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
         return res.status(500).json({ error: 'Error al editar el empleado' })

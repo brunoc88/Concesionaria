@@ -9,6 +9,8 @@ router.get('/crear', empleadoController.formularioEmpleado)
 
 router.post('/alta', empleadoController.altaEmpleado)
 
+router.get('/actualizar/:id', checkToken, empleadoController.actualizar)
+
 router.put('/editar/:id', checkToken, empleadoController.editarEmpleado)
 
 router.patch('/baja/:id', checkToken,empleadoController.desactivarCuenta)
