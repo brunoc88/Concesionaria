@@ -52,4 +52,5 @@ block content
                                 else
                                     form(action=`/vehiculo/activar/${v.idVehiculo}?_method=PATCH`, method="post")
                                         button(type="submit" class="btn btn-success") Activar 
-        
+    form(action="/vehiculo/registrar", method="get")
+            button(type="submit" class="btn btn-success") Registrar Vehiculo   

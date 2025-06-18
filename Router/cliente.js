@@ -8,6 +8,8 @@ router.get('/index', clienteController.allClients)
 
 router.get('/info/:id', clienteController.infoCliente)
 
+router.get('/registrar', clienteController.registar)
+
 router.post('/alta', clienteController.altaCliente)
 
 router.put('/editar/:id', clienteController.editarCliente)

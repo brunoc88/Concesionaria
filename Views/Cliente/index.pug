@@ -43,4 +43,6 @@ block content
                                 else
                                     form(action=`/cliente/activar/${c.idCliente}?_method=PATCH`, method="post")
                                         button(type="submit" class="btn btn-success") Activar 
-        
+    
+        form(action="/cliente/registrar", method="get")
+            button(type="submit" class="btn btn-success") Registrar Cliente 

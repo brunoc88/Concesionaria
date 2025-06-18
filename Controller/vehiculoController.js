@@ -30,15 +30,20 @@ exports.registrar = async(req, res) =>{
 
 exports.altaVehiculo = async(req, res) =>{
     try {
-        console.log("AUTO",req.body)
         const {modelo, marca, color, anio, precio, cantidad} = req.body 
 
         const checkVehiculo = await Vehiculo.findOne({where:{anio, color, marca, modelo}})
         if(checkVehiculo){
-            return res.status(409).json('Ya exite un auto registrado con esas caracteristicas!')
+            //return res.status(409).json('Ya exite un auto registrado con esas caracteristicas!')
+            return res.status(409).render('vehiculo/alta',{
+                vehiculo: req.body,
+                errorMessage: 'Ya exite un auto registrado con esas caracteristicas!'
+            })
         }
         await Vehiculo.create(req.body)
-        return res.status(201).json('Vehiculo creado!')
+        //return res.status(201).json('Vehiculo creado!')
+        req.session.message = 'Vehiculo creado!'
+        return res.status(201).redirect('/vehiculo/index')
     } catch (error) {
         console.log(`Hubo un error: ${error}`)
     }

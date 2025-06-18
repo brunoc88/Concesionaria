@@ -21,6 +21,14 @@ exports.infoCliente = async(req, res) =>{
     }
 }
 
+exports.registar = async(req, res) =>{
+    try {
+        return res.status(200).render('cliente/alta')
+    } catch (error) {
+        console.log(`Hubo un error: ${error}`)
+    }
+}
+
 exports.altaCliente = async (req, res) => {
     try {
         const data = req.body
@@ -29,13 +37,19 @@ exports.altaCliente = async (req, res) => {
         const id = null
         const duplicado = await checkDuplicados(data, modeEdit, id)
         if (duplicado.length >= 1) {
-            return res.status(409).json({
+            /*return res.status(409).json({
                 error: "duplicado!",
                 duplicados: duplicado
-            })
+            })*/
+           return res.status(409).render('cliente/alta',{
+            cliente:data,
+            errorMessage: duplicado
+           })
         }
         await Cliente.create(data)
-        return res.status(201).json('Cliente creado!')
+        //return res.status(201).json('Cliente creado!')
+        req.session.message = 'Cliente creado!'
+        return res.status(201).redirect('/cliente/index')
 
     } catch (error) {
         console.log(`Ocurrio un error: ${error}`)
