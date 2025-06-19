@@ -37,7 +37,7 @@ exports.altaEmpleado = async (req, res) => {
                 duplicados: duplicado
             })*/
             //return res.status(409).render('empleado/alta', { empleado: data })
-            return res.status(409).render('empleado/alta',{
+            return res.status(409).render('empleado/alta', {
                 empleado: data,
                 errorMessage: duplicado
             })
@@ -45,7 +45,7 @@ exports.altaEmpleado = async (req, res) => {
 
         if (data.usuario.length < 5) {
             //return res.status(400).json("nombre de usuario muy corto")
-            return res.status(400).render('empleado/alta',{
+            return res.status(400).render('empleado/alta', {
                 empleado: data,
                 errorMessage: "nombre de usuario muy corto"
             })
@@ -53,7 +53,7 @@ exports.altaEmpleado = async (req, res) => {
 
         if (data.password.length < 5) {
             //return res.status(400).json("password muy corto")
-            return res.status(400).render('empleado/alta',{
+            return res.status(400).render('empleado/alta', {
                 empleado: data,
                 errorMessage: "password muy corto"
             })
@@ -102,7 +102,11 @@ exports.actualizar = async (req, res) => {
     try {
         const { id } = req.params
         const empleado = await Empleado.findByPk(id)
-        return res.status(200).render('empleado/editar',{
+
+        // Elimina el campo de password si lo estás incluyendo
+        delete empleado.dataValues.password
+
+        return res.status(200).render('empleado/editar', {
             empleado,
         })
     } catch (error) {
@@ -120,14 +124,26 @@ exports.editarEmpleado = async (req, res) => {
 
         const duplicados = await checkDuplicados(req.body, modeEdit, req)
         if (duplicados.length >= 1) {
-            return res.status(409).json({ mensaje: 'Valores duplicados!', duplicados: duplicados })
+            //return res.status(409).json({ mensaje: 'Valores duplicados!', duplicados: duplicados })
+            return res.status(409).render('empleado/editar',{
+                empleado:{
+                    idEmpleado:id,
+                    nombre: req.body.nombre,
+                    apellido: req.body.apellido,
+                    telefono: req.body.telefono,
+                    dni: req.body.dni,
+                    email: req.body.email,
+                    usuario: req.body.usuario
+                },
+                errorMessage: duplicados
+            })
         }
         const cambios = await checkCambios(req.body, id)
 
         if (Object.keys(cambios).length === 0) {
             //return res.status(200).json({ mensaje: 'No hay cambios para aplicar.' })
-            return res.status(400).render('empleado/editar',{
-                errorMessage:'No hay cambios para aplicar.',
+            return res.status(400).render('empleado/editar', {
+                errorMessage: 'No hay cambios para aplicar.',
                 empleado
             })
         }
@@ -208,11 +224,11 @@ const checkCambios = async (empleado, id) => {
     if (empleado.email !== empleadoDB.email) cambios.email = empleado.email
     if (empleado.telefono !== empleadoDB.telefono) cambios.telefono = empleado.telefono
     if (empleado.dni !== empleadoDB.dni) cambios.dni = empleado.dni
-    let newPassword = await bcrypt.compare(empleado.password, empleadoDB.password)
-    if (!newPassword) {
+    if (empleado.password && empleado.password.length >= 5) {
         const hashedPassword = await bcrypt.hash(empleado.password, 10)
         cambios.password = hashedPassword
     }
+
 
     return cambios
 }   
